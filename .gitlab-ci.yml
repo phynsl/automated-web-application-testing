@@ -1,0 +1,18 @@
+stages:
+  -test
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+test_ui:
+  image: python:3.10
+  services:
+    - docker:dind
+  before_script:
+    - apt-get update && apt-get install -y docker-compose curl
+    - pip install -r requirements.txt
+    - docker-compose -f containers/docker0compose.yml up -d
+  script:
+    - pytest --alluredir=allure-results
+  after_script:
+    - docker-compose -f containers/docker-compose.yml down

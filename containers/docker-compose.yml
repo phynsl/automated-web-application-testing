@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  selenium-hub:
+    image: selenium/hub:4.16.1
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome:4.16.1
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+
+  mock-api:
+    image: wiremock/wiremock:2.35.0
+    ports:
+      - "8080:8080"

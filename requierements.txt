@@ -1,0 +1,9 @@
+selenium==4.16.1
+testcontainers[selenium,postgresql]
+requests
+dnspython
+faker
+pytest
+locust
+k6
+jmeter-api-client 
