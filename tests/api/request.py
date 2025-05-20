@@ -1,7 +1,7 @@
 import time 
 from urllib import request
 
-host = "http://172.19.79.102:8000/"
+host = "http://exmaple.com/"
 opener = request.build_opener()
 request = request.Request(host)
 request.add_header('user-agent', 'firefox')
