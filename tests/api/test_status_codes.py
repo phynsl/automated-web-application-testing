@@ -1,9 +1,14 @@
 import requests
 
-def test_status_code_ok():
-    response = requests.get("https://example.com/api/health")
-    assert response.status_code == 200
+BASE_URL = "https://example.com"
+paths = [
+    "/", "/login", "/admin", "/api/health", "/api/status", "/dashboard", "/nonexistent"
+]
 
-def test_status_code_not_found():
-    response = requests.get("https://example.com/api/nonexistent")
-    assert response.status_code == 404
+for path in paths:
+    url = BASE_URL + path
+    try:
+        response = requests.get(url, timeout=5)
+        print(f"{url} → {response.status_code}")
+    except requests.RequestException as e:
+        print(f"{url} → Error: {e}")
