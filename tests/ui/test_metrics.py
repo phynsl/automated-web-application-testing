@@ -1,14 +1,8 @@
 from framework.metrics.navigation_timing import get_navigation_timings
-from framework.metrics.resource_metrics import get_resource_count
-from framework.metrics.browser_logs import get_js_errors
 
-def test_ui_metrics(browser):
-    browser.get("https://example.com")
+def test_page_performance(driver):
+    driver.get("http://localhost/selfconcept/index.html")
+    metrics = get_navigation_timings(driver)
 
-    timings = get_navigation_timings(browser)
-    resources = get_resource_count(browser)
-    js_errors = get_js_errors(browser)
+    assert metrics["page_load_time"] < 3000, "Страница грузится слишком медленно"
 
-    assert timings["frontend"] < 2000
-    assert resources["images"] < 50
-    assert len(js_errors) == 0

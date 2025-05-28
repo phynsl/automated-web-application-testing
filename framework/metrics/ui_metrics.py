@@ -1,26 +1,18 @@
-import json
 import time
 
-class UIMetricsCollector:
-    def __init__(self, driver):
-        self.driver = driver
+class UIMetrics:
+    def __init__(self):
+        self.metrics = {}
 
-    def collect_performance_metrics(self):
-        performance = self.driver.execute_script("return window.performance.timing")
-        navigation = self.driver.execute_script("return window.performance.getEntriesByType('navigation')[0]")
-        resources = self.driver.execute_script("return window.performance.getEntriesByType('resource')")
-        
-        metrics = {
-            "loadEventEnd": performance["loadEventEnd"],
-            "domContentLoadedEventEnd": performance["domContentLoadedEventEnd"],
-            "responseStart": performance["responseStart"],
-            "responseEnd": performance["responseEnd"],
-            "loadTime": navigation["loadEventEnd"] - navigation["startTime"] if navigation else None,
-            "resourceCount": len(resources)
-        }
-        return metrics
+    def start_timer(self, name):
+        self.metrics[name] = {'start': time.time()}
 
-    def collect_js_errors(self):
-        logs = self.driver.get_log("browser")
-        js_errors = [log for log in logs if log["level"] == "SEVERE"]
-        return js_errors
+    def stop_timer(self, name):
+        if name in self.metrics and 'start' in self.metrics[name]:
+            self.metrics[name]['end'] = time.time()
+            self.metrics[name]['duration'] = self.metrics[name]['end'] - self.metrics[name]['start']
+
+    def report(self):
+        for name, data in self.metrics.items():
+            print(f"🕒 {name}: {data.get('duration', 0):.2f} sec")
+

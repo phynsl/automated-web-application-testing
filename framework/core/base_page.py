@@ -1,24 +1,26 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from framework.utils.logger import logger
+from framework.utils.wait_utils import wait_for_element
 
 class BasePage:
-    def __init__(self, driver, timeout=10):
+    def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, timeout)
 
     def open(self, url):
+        logger.info(f"Opening URL: {url}")
         self.driver.get(url)
 
-    def find(self, locator):
-        return self.wait.until(EC.presence_of_element_located(locator))
-
     def click(self, locator):
-        self.find(locator).click()
+        logger.info(f"Clicking on: {locator}")
+        wait_for_element(self.driver, locator).click()
 
-    def input_text(self, locator, text):
-        element = self.find(locator)
+    def fill(self, locator, text):
+        logger.info(f"Filling {locator} with: {text}")
+        element = wait_for_element(self.driver, locator)
         element.clear()
         element.send_keys(text)
 
-    def get_title(self):
-        return self.driver.title
+    def get_text(self, locator):
+        logger.info(f"Getting text from: {locator}")
+        return wait_for_element(self.driver, locator).text
