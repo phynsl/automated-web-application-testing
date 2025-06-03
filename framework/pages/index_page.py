@@ -15,3 +15,4 @@ class IndexPage:
 
     def go_to_register(self):
         self.driver.find_element(*self.REGISTER_LINK).click()
+

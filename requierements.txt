@@ -13,3 +13,5 @@ loguru
 testcontainers
 beautifulsoup4
 lxml
+
+#tools to install individually k6 and xmpp
