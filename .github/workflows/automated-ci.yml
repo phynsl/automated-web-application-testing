@@ -1,18 +1,41 @@
-stages:
-  -test
+name: UI Tests
 
-variables:
-  DOCKER_DRIVER: overlay2
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-test_ui:
-  image: python:3.10
-  services:
-    - docker:dind
-  before_script:
-    - apt-get update && apt-get install -y docker-compose curl
-    - pip install -r requirements.txt
-    - docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml up -d
-  script:
-    - pytest --alluredir=allure-results
-  after_script:
-    - docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml down
+jobs:
+  test_ui:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose curl
+        pip install -r requirements.txt
+
+    - name: Start services
+      run: docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml up -d
+
+    - name: Run tests
+      run: pytest --alluredir=allure-results
+
+    - name: Stop services
+      if: always()
+      run: docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml down
