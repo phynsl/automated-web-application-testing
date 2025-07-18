@@ -11,8 +11,8 @@ test_ui:
   before_script:
     - apt-get update && apt-get install -y docker-compose curl
     - pip install -r requirements.txt
-    - docker-compose -f containers/docker0compose.yml up -d
+    - docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml up -d
   script:
     - pytest --alluredir=allure-results
   after_script:
-    - docker-compose -f containers/docker-compose.yml down
+    - docker-compose -f containers/grid/docker-compose.yml -f containers/mariadb/docker-compose.yml down
