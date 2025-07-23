@@ -6,6 +6,19 @@ services:
       - "8000:8000"
     volumes:
       - ./pages:/var/www/html
+    depends_on:
+      - mariadb
+      
+  mariadb:
+    build: .
+    container_name: selfconcept-mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mariadb_data:/var/lib/mysql    
+      
   selenium-hub:
     image: selenium/hub:4.21.0-20240521
     container_name: selenium-hub
@@ -19,4 +32,7 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+volumes:
+  mariadb_data:
       
