@@ -11,11 +11,14 @@ services:
       
   mariadb:
     build: .
+      context: .
+      dockerfile: Dockerfile
     container_name: selfconcept-mariadb
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: selfconcept
     volumes:
       - mariadb_data:/var/lib/mysql    
       
