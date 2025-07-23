@@ -1,17 +1,10 @@
 selenium
 pytest
 faker
-bcrypt
-mariadb
 requests
 pytest-html
 webdriver-manager
 pytest-xdist
-perfomance-timing
-psutil
 loguru
 testcontainers
 beautifulsoup4
-lxml
-
-#tools to install individually k6 and xmpp
